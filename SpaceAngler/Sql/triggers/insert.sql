@@ -12,7 +12,7 @@ AS
 	FETCH NEXT FROM db_cursor INTO @parentId, @value
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		DECLARE @pR INT = (SELECT R FROM [Node] WHERE Id = @parentId)
+		DECLARE @pR INT = (SELECT R FROM [Node] WHERE [Id] = @parentId)
 		
 		UPDATE [Node] SET L = L + 2 WHERE L > @pR
 		UPDATE [Node] SET R = R + 2 WHERE R >= @pR

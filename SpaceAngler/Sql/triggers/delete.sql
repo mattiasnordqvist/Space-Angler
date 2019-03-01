@@ -5,14 +5,14 @@ AS
 	ALTER TABLE [Node] NOCHECK CONSTRAINT all
 	DECLARE @Id INT = 0
 	DECLARE db_cursor CURSOR FOR 
-	SELECT Id FROM deleted
+	SELECT [Id] FROM deleted
 	OPEN db_cursor
 
 	FETCH NEXT FROM db_cursor INTO @Id
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		DECLARE @l INT = (SELECT L FROM [Node] WHERE Id = @Id)
-		DECLARE @r INT = (SELECT R FROM [Node] WHERE Id = @Id)
+		DECLARE @l INT = (SELECT L FROM [Node] WHERE [Id] = @Id)
+		DECLARE @r INT = (SELECT R FROM [Node] WHERE [Id] = @Id)
 		DECLARE @w INT = (@r-@l+1)
 		DELETE FROM [Node] WHERE L BETWEEN @l AND @r
 		DELETE FROM [Node] WHERE Id = @Id

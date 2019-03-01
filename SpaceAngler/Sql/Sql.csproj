@@ -5,19 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="alter-table.sql" />
+    <None Remove="create-table.sql" />
     <None Remove="create-triggers.sql" />
-    <None Remove="fill-l-and-r.sql" />
-    <None Remove="init-table.sql" />
+    <None Remove="filler.sql" />
+    <None Remove="test-data.sql" />
     <None Remove="triggers\insert.sql" />
     <None Remove="triggers\update.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="alter-table.sql" />
+    <EmbeddedResource Include="test-data.sql" />
     <EmbeddedResource Include="triggers\update.sql" />
     <EmbeddedResource Include="triggers\insert.sql" />
     <EmbeddedResource Include="triggers\delete.sql" />
-    <EmbeddedResource Include="fill-l-and-r.sql" />
-    <EmbeddedResource Include="init-table.sql" />
+    <EmbeddedResource Include="filler.sql" />
+    <EmbeddedResource Include="create-table.sql" />
   </ItemGroup>
 
 </Project>
