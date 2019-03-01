@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="create-triggers.sql" />
+    <None Remove="fill-l-and-r.sql" />
+    <None Remove="init-table.sql" />
+    <None Remove="triggers\insert.sql" />
+    <None Remove="triggers\update.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="triggers\update.sql" />
+    <EmbeddedResource Include="triggers\insert.sql" />
+    <EmbeddedResource Include="triggers\delete.sql" />
+    <EmbeddedResource Include="fill-l-and-r.sql" />
+    <EmbeddedResource Include="init-table.sql" />
+  </ItemGroup>
+
+</Project>

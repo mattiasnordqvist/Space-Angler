@@ -1,5 +1,3 @@
--- Fill Left and Right
-
 WHILE EXISTS (SELECT child.Id FROM [Node] child
 				LEFT JOIN [Node] parent ON parent.Id = child.Parent_Id
 				WHERE (parent.L IS NOT NULL AND child.L IS NULL) OR (child.Parent_Id IS NULL AND child.L IS NULL))
