@@ -1,4 +1,4 @@
-CREATE TRIGGER insteadOfInsertTrigger
+CREATE TRIGGER insteadOfInsertNodeTrigger
     ON [Node]
     INSTEAD OF INSERT
 AS

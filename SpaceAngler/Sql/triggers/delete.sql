@@ -1,4 +1,4 @@
-CREATE TRIGGER insteadOfDeleteTrigger
+CREATE TRIGGER insteadOfDeleteNodeTrigger
     ON [Node]
     INSTEAD OF DELETE
 AS

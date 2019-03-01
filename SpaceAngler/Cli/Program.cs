@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using System.Text;
 using Sql;
@@ -33,13 +32,11 @@ namespace Cli
             sb.AppendLine("GO");
 
             var concatenatedTemplateScript = sb.ToString();
-            var escapedTableName = Escape(tableName);
-            var escapedIdColumnName = Escape(idColumnName);
-            var escapedParentIdColumnName = Escape(parentIdColumnName);
             var scriptWithReplacedVariables = concatenatedTemplateScript
-                .Replace(templateTableName, escapedTableName)
-                .Replace(templateIdColumnName, escapedIdColumnName)
-                .Replace(templateParentIdColumnName, escapedParentIdColumnName);
+                .Replace(Escape(templateTableName), Escape(tableName))
+                .Replace(Escape(templateIdColumnName), Escape(idColumnName))
+                .Replace(Escape(templateParentIdColumnName), Escape(parentIdColumnName))
+                .Replace(UnEscape(templateTableName)+"Trigger", UnEscape(tableName) + "Trigger");
 
             return scriptWithReplacedVariables;
 
@@ -51,10 +48,27 @@ namespace Cli
             {
                 tableName = "[" + tableName;
             }
+
             if (!tableName.EndsWith("]"))
             {
                 tableName = tableName + "]";
             }
+
+            return tableName;
+        }
+
+        private static string UnEscape(string tableName)
+        {
+            if (tableName.StartsWith("["))
+            {
+                tableName = tableName.Substring(1);
+            }
+
+            if (tableName.EndsWith("]"))
+            {
+                tableName = tableName.Substring(0, tableName.Length - 1);
+            }
+
             return tableName;
         }
     }
