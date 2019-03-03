@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
-namespace Sql
+namespace Shared
 {
-    public static class Resources
+    public class Resources<T>
     {
-        public static string ReadScript(string scriptName)
+        public virtual string Read(string resourceName)
         {
-            var assembly = Assembly.GetAssembly(typeof(Resources));
-            var resourceName = $"Sql.{scriptName}.sql";
+            var assembly = Assembly.GetAssembly(typeof(T));
+
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {

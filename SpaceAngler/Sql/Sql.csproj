@@ -24,4 +24,8 @@
     <EmbeddedResource Include="create-table.sql" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -7,6 +7,7 @@ namespace Cli
 {
     public class Program
     {
+        static Scripts scripts = new Scripts();
         static void Main(string[] args)
         {
             var p = new Params(args);
@@ -20,15 +21,15 @@ namespace Cli
         {
             var sb = new StringBuilder();
             sb.AppendLine($"-- SPACE ANGLER v {Assembly.GetExecutingAssembly().GetName().Version} see https://github.com/mattiasnordqvist/Space-Angler");
-            sb.AppendLine(Resources.ReadScript("alter-table"));
+            sb.AppendLine(scripts.Read("alter-table"));
             sb.AppendLine("GO");
-            sb.AppendLine(Resources.ReadScript("filler"));
+            sb.AppendLine(scripts.Read("filler"));
             sb.AppendLine("GO");
-            sb.AppendLine(Resources.ReadScript("triggers.delete"));
-            sb.AppendLine("GO");
-            sb.AppendLine(Resources.ReadScript("triggers.insert"));
-            sb.AppendLine("GO");
-            sb.AppendLine(Resources.ReadScript("triggers.update"));
+            sb.AppendLine(scripts.Read("triggers.delete"));
+            sb.AppendLine("GO");                           
+            sb.AppendLine(scripts.Read("triggers.insert"));
+            sb.AppendLine("GO");                           
+            sb.AppendLine(scripts.Read("triggers.update"));
             sb.AppendLine("GO");
 
             var concatenatedTemplateScript = sb.ToString();
