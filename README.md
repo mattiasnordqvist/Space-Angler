@@ -9,3 +9,5 @@ update, insert och delete-triggers för att upprätthålla värden i left- och r
 man får skapa sina index själv!
 
 dokumentation kommer!
+
+obs: buggar finns ännu!!
