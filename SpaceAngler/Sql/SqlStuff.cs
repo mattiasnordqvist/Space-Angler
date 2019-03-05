@@ -2,10 +2,6 @@
 {
     public static class SqlStuff
     {
-        public static string SqlReplace(this string t, string template, string value)
-        {
-            return t.Replace(Escape(template), Escape(value));
-        }
         public static string Escape(this string tableName)
         {
             if (!tableName.StartsWith("["))

@@ -11,21 +11,27 @@ namespace Sql
     public class Script
     {
         private IEnumerable<string> batches;
+        private List<string> list;
 
         public Script(string sql)
         {
             batches = sql.Split("GO").Where(x => x != string.Empty);
         }
 
-        public static Script Read<T>(string path)
+        public Script(List<string> list)
         {
-            return new Script(Resources<T>.Read($"Sql.{path}.sql"));
+            batches = list;
         }
 
-        public Script Replace(string thisWith, string that)
+        public static Script Read<T>(string path)
         {
-            batches = batches.Select(x => x.SqlReplace(thisWith, that)).ToList();
-            return this;
+            return new Script(Resources<T>.Read(path));
+        }
+
+        public Script New(string thisWith, string that)
+        {
+            
+            return new Script(batches.Select(x => x.Replace(thisWith, that)).ToList());
         }
 
         public async Task ExecuteAsync(SqlConnection connection)

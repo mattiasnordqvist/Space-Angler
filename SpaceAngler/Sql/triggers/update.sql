@@ -1,4 +1,4 @@
-CREATE TRIGGER afterUpdateNodeTrigger
+CREATE TRIGGER UpdateNodeTrigger
     ON [Node]
     AFTER UPDATE
 AS

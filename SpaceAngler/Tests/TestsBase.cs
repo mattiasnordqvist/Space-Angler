@@ -18,27 +18,46 @@ namespace Tests
                 Initial Catalog=master;
             ";
 
-        
+
         public static Script CreateTable = TestScripts.Read("create-table");
         public static Script DropTable = TestScripts.Read("create-table");
         private Script _alterTable = Script.Read<Script>("alter-table");
         private Script _filler = Script.Read<Script>("filler");
+        private Script _iTrigger = Script.Read<Script>("triggers.insert");
+        private Script _uTrigger = Script.Read<Script>("triggers.update");
+        private Script _dTrigger = Script.Read<Script>("triggers.delete");
         protected SqlConnection _connection;
-        protected CaptainData.Captain Captain = new CaptainData.Captain();
 
-        protected string CreateTableName() { return $"[{Guid.NewGuid().ToString()}]"; }
+        protected string CreateTableName() { return $"{Guid.NewGuid().ToString()}"; }
 
-        protected Script AlterTable(string tableName)
+        protected Script NewAlterTable(string tableName)
         {
-            return _alterTable.Replace("[Node]", tableName);
+            return _alterTable.New("[Node]", SqlStuff.Escape(tableName));
         }
 
         protected Script Filler(string tableName)
         {
-            return _filler.Replace("[Node]", tableName);
+            return _filler.New("[Node]", SqlStuff.Escape(tableName));
         }
 
-    
+        protected Script UTrigger(string tableName)
+        {
+            return _uTrigger.New("[Node]", SqlStuff.Escape(tableName))
+            .New("Update" + SqlStuff.UnEscape("Node") + "Trigger", SqlStuff.Escape("Update" + SqlStuff.UnEscape(tableName) + "Trigger"));
+        }
+
+        protected Script ITrigger(string tableName)
+        {
+            return _iTrigger.New("[Node]", SqlStuff.Escape(tableName))
+                .New("Insert"+SqlStuff.UnEscape("Node") + "Trigger", SqlStuff.Escape("Insert" + SqlStuff.UnEscape(tableName) + "Trigger"));
+        }
+        protected Script DTrigger(string tableName)
+        {
+            return _dTrigger.New("[Node]", SqlStuff.Escape(tableName))
+                .New("Delete" + SqlStuff.UnEscape("Node") + "Trigger", SqlStuff.Escape("Delete" + SqlStuff.UnEscape(tableName) + "Trigger"));
+        }
+
+
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -60,91 +79,32 @@ namespace Tests
             _connection.Dispose();
         }
 
-       
+
 
         protected async Task<LRTest> Test(string tree)
         {
             var tableName = CreateTableName();
-            await CreateTable.Replace("[Node]", tableName).ExecuteAsync(_connection);
-            var expected = await Arrange(tree, tableName, _connection);
-            await AlterTable(tableName).ExecuteAsync(_connection);
+            await CreateTable.New("[Node]", SqlStuff.Escape(tableName)).ExecuteAsync(_connection);
+            await Arrange(tree, SqlStuff.Escape(tableName), _connection);
+            await NewAlterTable(tableName).ExecuteAsync(_connection);
             await Filler(tableName).ExecuteAsync(_connection);
-            return new LRTest(tableName, expected, _connection);
+            await ITrigger(tableName).ExecuteAsync(_connection);
+            await UTrigger(tableName).ExecuteAsync(_connection);
+            await DTrigger(tableName).ExecuteAsync(_connection);
+            return new LRTest(tableName, tree, _connection);
         }
 
-        private async Task<List<Node>> Arrange(string data, string tableName, SqlConnection connection)
+        private async Task Arrange(string data, string tableName, SqlConnection connection)
         {
-            var nodes = new List<Node>();
-            var list = data.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            var parent = new Stack<Node>();
-            var lastLevel = 0;
-            foreach (var e in list)
+            var nodes = new Tree(data).Nodes;
+
+            var captain = new CaptainData.Captain();
+            foreach (var node in nodes.Values)
             {
-                var splits = e.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var level = splits.Count();
-                var number = int.Parse(splits.Last());
-                while (lastLevel >= level)
-                {
-                    lastLevel--;
-                    parent.Pop();
-
-                }
-                if (lastLevel == 0)
-                {
-                    var node = new Node() { Id = number };
-                    nodes.Add(node);
-                    parent.Push(node);
-                }
-
-                else if (lastLevel + 1 == level)
-                {
-                    var node = new Node() { Id = number, Parent_Id = parent.Peek().Id, Parent = parent.Peek() };
-                    parent.Peek().Children.Add(node);
-                    nodes.Add(node);
-                    parent.Push(node);
-                }
-
-                lastLevel = level;
+                captain.Insert(tableName, node);
             }
 
-            foreach (var node in nodes)
-            {
-                Captain.Insert(tableName, node);
-            }
-
-            await Captain.Go(connection);
-            return nodes;
-        }
-    }
-
-    public class LRTest
-    {
-        private string _tableName;
-        private List<Node> _expected;
-        private readonly SqlConnection _connection;
-
-        public LRTest(string tableName, List<Node> expected, SqlConnection connection)
-        {
-            _tableName = tableName;
-            _expected = expected;
-            _connection = connection;
-        }
-        private async Task<Asserter> GetAsserter(string tableName, List<Node> expected)
-        {
-            var nodes = _connection.Query<Node>($"SELECT * FROM {tableName}").ToDictionary(x => x.Id, x => x);
-            await DropTable(tableName).ExecuteAsync(_connection);
-            return new Asserter(nodes, expected);
-        }
-        internal async Task AssertAll()
-        {
-            // ASSERT
-            var asserter = await GetAsserter(_tableName, _expected);
-            asserter.AssertAll();
-        }
-
-        private Script DropTable(string tableName)
-        {
-            return TestsBase.DropTable.Replace("[Node]", tableName);
+            await captain.Go(connection);
         }
     }
 }

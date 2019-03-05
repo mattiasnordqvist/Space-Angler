@@ -9,29 +9,13 @@ namespace Tests
         private Dictionary<int, Node> list;
         private readonly Dictionary<int, Node> expected;
 
-        public Asserter(Dictionary<int, Node> list, List<Node> expected)
+        public Asserter(Dictionary<int, Node> list, string expected)
         {
             this.list = list;
-
-            int v = 0;
-            foreach (Node n in expected.Where(x => x.Parent == null))
-            {
-                v = SetRL(n, v);
-            }
-            this.expected = expected.ToDictionary(x => x.Id, x => x);
+            this.expected = new Tree(expected).SetLR().Nodes;
         }
 
-        private int SetRL(Node n, int v)
-        {
-            n.L = ++v;
-            foreach (var child in n.Children)
-            {
-                v = SetRL(child, v);
-            }
-            n.R = ++v;
-            n.IsLeaf = !n.Children.Any();
-            return v;
-        }
+       
 
         public void AssertAll()
         {

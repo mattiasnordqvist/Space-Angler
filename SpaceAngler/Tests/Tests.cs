@@ -5,7 +5,7 @@ namespace Tests
 {
 
     [TestFixture]
-    public class FillerScriptTests : TestsBase
+    public class Tests : TestsBase
     {
         [Test]
         public async Task FillerHandlesMultipleRoots()
@@ -32,6 +32,22 @@ namespace Tests
             ";
             var test = await Test(tree);
             await test.AssertAll();
+        }
+
+        [Test]
+        public async Task InsertingInTreeWithOneNode()
+        {
+            var test = await Test("1");
+            await test.ExecuteAsync($"INSERT INTO [{test.Table}] (Id, Parent_Id) VALUES (2, 1)");
+            await test.AssertAll("1 > 2");
+        }
+
+        [Test]
+        public async Task InsertingInEmptyTree()
+        {
+            var test = await Test("");
+            await test.ExecuteAsync($"INSERT INTO [{test.Table}] (Id) VALUES (1)");
+            await test.AssertAll("1");
         }
     }
 }
