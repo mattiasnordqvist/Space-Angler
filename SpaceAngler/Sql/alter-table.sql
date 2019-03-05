@@ -1,5 +1,4 @@
 -- Add left right
-
 ALTER TABLE [Node] ADD L INT NULL
 ALTER TABLE [Node] ADD R INT NULL
 GO

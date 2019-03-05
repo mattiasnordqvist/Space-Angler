@@ -1,38 +1,62 @@
-/****** Script for SelectTopNRows command from SSMS  ******/
-SELECT *
-  FROM	[Node]
-
-
-  WHILE EXISTS (SELECT child.[Id] FROM [Node] child
-				LEFT JOIN [Node] parent ON parent.[Id] = child.Parent_Id
-				WHERE (parent.L IS NOT NULL AND child.L IS NULL) OR (child.Parent_Id IS NULL AND child.L IS NULL))
+CREATE PROCEDURE SetLR
+(
+	@Id INT,
+	@L INT,
+	@Next INT OUTPUT
+)
+AS
 BEGIN
-	DECLARE @Id INT = 0
-	
-	DECLARE db_cursor CURSOR FOR 
-	SELECT child.Id FROM [Node] child
-	LEFT JOIN [Node] parent ON parent.[Id] = child.Parent_Id
-	WHERE (parent.L IS NOT NULL AND child.L IS NULL) OR child.Parent_Id IS NULL  
-	OPEN db_cursor
+	-- Declare the return variable here
+	DECLARE @R INT = 0
+	DECLARE @ChildId INT
 
-	FETCH NEXT FROM db_cursor INTO @Id
+	UPDATE [Node] SET L = @L WHERE Id = @Id
+
+
+	DECLARE db_cursor CURSOR LOCAL FOR 
+	SELECT [Id] FROM [Node] WHERE [Parent_Id] = @Id
+	OPEN db_cursor
+	DECLARE @NextL INT = (@L + 1);
+	SET @R = @NextL 
+
+	FETCH NEXT FROM db_cursor INTO @ChildId
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		IF (SELECT Parent_Id FROM [Node] WHERE [Id] = @Id) IS NOT NULL
-		BEGIN
-			DECLARE @pR INT = (SELECT R FROM [Node] WHERE [Id] = (SELECT Parent_Id FROM [Node] WHERE [Id] = @Id))
-			UPDATE [Node] SET L = L + 2 WHERE L > @pR
-			UPDATE [Node] SET R = R + 2 WHERE R >= @pR
-			UPDATE [Node] SET L = @pR, R = @pr+1 WHERE Id = @Id
-		END 
-		ELSE 
-		BEGIN
-			DECLARE @maxR INT = (SELECT ISNULL(Max(R),0) FROM [Node] WHERE Parent_Id IS NULL)
-			UPDATE [Node] SET L = @maxR+1, R = @maxR+2 WHERE Id = @Id
-		END
-
-		FETCH NEXT FROM db_cursor INTO @Id
+		EXEC SetLR @ChildId, @NextL, @Next = @R OUT
+		SET @NextL = @R
+		FETCH NEXT FROM db_cursor INTO @ChildId
 	END
 	CLOSE db_cursor
 	DEALLOCATE db_cursor
+
+	UPDATE [Node] SET R = @R WHERE Id = @Id
+
+	SET @Next = @R + 1
+
 END
+GO
+
+
+
+DECLARE @R INT = 0
+DECLARE @L INT = 1
+DECLARE @Id INT
+DECLARE db_cursor CURSOR LOCAL FOR 
+SELECT [Id] FROM [Node] WHERE [Parent_Id] IS NULL AND [L] IS NULL
+OPEN db_cursor
+	
+FETCH NEXT FROM db_cursor INTO @Id
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	EXEC SetLR @Id, @L, @Next = @R OUT
+		
+	SET @L = @R
+	FETCH NEXT FROM db_cursor INTO @Id
+END
+CLOSE db_cursor
+DEALLOCATE db_cursor
+
+GO
+
+DROP PROCEDURE SetLR
+GO
