@@ -7,8 +7,8 @@
   <ItemGroup>
     <None Remove="alter-table.sql" />
     <None Remove="create-triggers.sql" />
-    <None Remove="filler - Copy.sql" />
     <None Remove="filler.sql" />
+    <None Remove="oldfiller.sql" />
     <None Remove="test-data.sql" />
     <None Remove="triggers\insert.sql" />
     <None Remove="triggers\update.sql" />
@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="alter-table.sql" />
-    <EmbeddedResource Include="filler - Copy.sql" />
+    <EmbeddedResource Include="oldfiller.sql" />
     <EmbeddedResource Include="test-data.sql" />
     <EmbeddedResource Include="triggers\update.sql" />
     <EmbeddedResource Include="triggers\insert.sql" />

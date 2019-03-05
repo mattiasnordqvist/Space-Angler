@@ -8,7 +8,7 @@ AS
 	DECLARE @Id INT = 0
 	DECLARE @NewParent_Id INT = 0
 	DECLARE db_cursor CURSOR FOR 
-	SELECT [Id], Parent_Id FROM inserted
+	SELECT [Id], [Parent_Id] FROM inserted
 	OPEN db_cursor
 
 	FETCH NEXT FROM db_cursor INTO @Id, @NewParent_Id
@@ -47,7 +47,7 @@ AS
 		END
 		ELSE
 		BEGIN
-			DECLARE @maxR INT = (SELECT ISNULL(Max(R),0) FROM [Node] WHERE Parent_Id IS NULL)
+			DECLARE @maxR INT = (SELECT ISNULL(Max(R),0) FROM [Node] WHERE [Parent_Id] IS NULL)
 			DECLARE @newR INT = @maxR+@w
 			SET @newL = @maxR+1
 			UPDATE [Node] SET L = @newL, R = @newR WHERE Id = @Id
