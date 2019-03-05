@@ -6,7 +6,7 @@ namespace Shared
 {
     public class Resources<T>
     {
-        public virtual string Read(string resourceName)
+        public static string Read(string resourceName)
         {
             var assembly = Assembly.GetAssembly(typeof(T));
 

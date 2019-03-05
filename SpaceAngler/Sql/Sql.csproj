@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <None Remove="alter-table.sql" />
-    <None Remove="create-table.sql" />
     <None Remove="create-triggers.sql" />
     <None Remove="filler.sql" />
     <None Remove="test-data.sql" />
@@ -21,7 +20,11 @@
     <EmbeddedResource Include="triggers\insert.sql" />
     <EmbeddedResource Include="triggers\delete.sql" />
     <EmbeddedResource Include="filler.sql" />
-    <EmbeddedResource Include="create-table.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>

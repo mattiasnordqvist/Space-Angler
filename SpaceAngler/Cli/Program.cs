@@ -1,13 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Text;
+using Shared;
 using Sql;
 
 namespace Cli
 {
     public class Program
     {
-        static Scripts scripts = new Scripts();
+        static Resources<Script> scripts = new Resources<Script>();
         static void Main(string[] args)
         {
             var p = new Params(args);
@@ -21,56 +23,25 @@ namespace Cli
         {
             var sb = new StringBuilder();
             sb.AppendLine($"-- SPACE ANGLER v {Assembly.GetExecutingAssembly().GetName().Version} see https://github.com/mattiasnordqvist/Space-Angler");
-            sb.AppendLine(scripts.Read("alter-table"));
+            sb.AppendLine(Script.Read<Script>("Sql.alter-table.sql").ToString());
             sb.AppendLine("GO");
-            sb.AppendLine(scripts.Read("filler"));
+            sb.AppendLine(Script.Read<Script>("Sql.filler.sql").ToString());
             sb.AppendLine("GO");
-            sb.AppendLine(scripts.Read("triggers.delete"));
+            sb.AppendLine(Script.Read<Script>("Sql.triggers.delete.sql").ToString());
             sb.AppendLine("GO");                           
-            sb.AppendLine(scripts.Read("triggers.insert"));
+            sb.AppendLine(Script.Read<Script>("Sql.triggers.insert.sql").ToString());
             sb.AppendLine("GO");                           
-            sb.AppendLine(scripts.Read("triggers.update"));
+            sb.AppendLine(Script.Read<Script>("Sql.triggers.update.sql").ToString());
             sb.AppendLine("GO");
 
             var concatenatedTemplateScript = sb.ToString();
             var scriptWithReplacedVariables = concatenatedTemplateScript
-                .Replace(Escape(templateTableName), Escape(tableName))
-                .Replace(Escape(templateIdColumnName), Escape(idColumnName))
-                .Replace(Escape(templateParentIdColumnName), Escape(parentIdColumnName))
-                .Replace(UnEscape(templateTableName)+"Trigger", UnEscape(tableName) + "Trigger");
+                .SqlReplace(templateTableName, tableName)
+                .SqlReplace(templateIdColumnName, idColumnName)
+                .SqlReplace(templateParentIdColumnName, parentIdColumnName)
+                .Replace(SqlStuff.UnEscape(templateTableName)+"Trigger", SqlStuff.UnEscape(tableName) + "Trigger");
 
             return scriptWithReplacedVariables;
-
-        }
-
-        private static string Escape(string tableName)
-        {
-            if (!tableName.StartsWith("["))
-            {
-                tableName = "[" + tableName;
-            }
-
-            if (!tableName.EndsWith("]"))
-            {
-                tableName = tableName + "]";
-            }
-
-            return tableName;
-        }
-
-        private static string UnEscape(string tableName)
-        {
-            if (tableName.StartsWith("["))
-            {
-                tableName = tableName.Substring(1);
-            }
-
-            if (tableName.EndsWith("]"))
-            {
-                tableName = tableName.Substring(0, tableName.Length - 1);
-            }
-
-            return tableName;
         }
     }
 }

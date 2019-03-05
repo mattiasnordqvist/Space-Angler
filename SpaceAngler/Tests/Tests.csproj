@@ -7,13 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="create-table.sql" />
+    <None Remove="drop-table.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="drop-table.sql" />
+    <EmbeddedResource Include="create-table.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CaptainData" Version="0.0.23" />
     <PackageReference Include="Dapper" Version="1.60.1" />
-    <PackageReference Include="nunit" Version="3.10.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sql\Sql.csproj" />
   </ItemGroup>
 
 </Project>
