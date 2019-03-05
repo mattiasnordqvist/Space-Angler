@@ -147,5 +147,31 @@ namespace Tests
             > 3    
             ");
         }
+
+
+        [Test]
+        public async Task DeleteOneOfManyRoots()
+        {
+            var tree = @"
+            1       
+            > 2     
+            > > 5   
+            > > 6   
+            3     
+            > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ";
+            var test = await Test(tree);
+            await test.ExecuteAsync($"DELETE FROM [{test.Table}] WHERE Id = 1");
+            await test.AssertAll(@"
+            3     
+            > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ");
+        }
     }
 }
