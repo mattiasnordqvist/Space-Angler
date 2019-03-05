@@ -376,5 +376,32 @@ namespace Tests
             > > > > 6
             ");
         }
+
+        public async Task UpdateMultiple()
+        {
+            var test = await Test(@"
+            1       
+            > 2
+            > > 4
+            > > 5
+            > > > 3
+            > > > 6
+            > 7
+            > 8
+            > > 9
+            ");
+            await test.ExecuteAsync($"UPDATE [{test.Table}] SET Parent_Id = 4 WHERE Parent_Id = 5");
+            await test.AssertAll(@"
+            1       
+            > 2
+            > > 4
+            > > > 3
+            > > > 6            
+            > > 5
+            > 7
+            > 8
+            > > 9
+            ");
+        }
     }
 }
