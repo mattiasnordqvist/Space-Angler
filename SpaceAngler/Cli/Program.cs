@@ -23,15 +23,15 @@ namespace Cli
         {
             var sb = new StringBuilder();
             sb.AppendLine($"-- SPACE ANGLER v {Assembly.GetExecutingAssembly().GetName().Version} see https://github.com/mattiasnordqvist/Space-Angler");
-            sb.AppendLine(Script.Read<Script>("Sql.alter-table.sql").ToString());
+            sb.AppendLine(Script.Read<Script>("alter-table").ToString());
             sb.AppendLine("GO");
-            sb.AppendLine(Script.Read<Script>("Sql.filler.sql").ToString());
+            sb.AppendLine(Script.Read<Script>("filler").ToString());
             sb.AppendLine("GO");
-            sb.AppendLine(Script.Read<Script>("Sql.triggers.delete.sql").ToString());
-            sb.AppendLine("GO");                           
-            sb.AppendLine(Script.Read<Script>("Sql.triggers.insert.sql").ToString());
-            sb.AppendLine("GO");                           
-            sb.AppendLine(Script.Read<Script>("Sql.triggers.update.sql").ToString());
+            sb.AppendLine(Script.Read<Script>("triggers.delete").ToString());
+            sb.AppendLine("GO");
+            sb.AppendLine(Script.Read<Script>("triggers.insert").ToString());
+            sb.AppendLine("GO");
+            sb.AppendLine(Script.Read<Script>("triggers.update").ToString());
             sb.AppendLine("GO");
 
             var concatenatedTemplateScript = new Script(sb.ToString());
@@ -39,7 +39,7 @@ namespace Cli
                 .New(SqlStuff.Escape(templateTableName), SqlStuff.Escape(tableName))
                 .New(SqlStuff.Escape(templateIdColumnName), SqlStuff.Escape(idColumnName))
                 .New(SqlStuff.Escape(templateParentIdColumnName), SqlStuff.Escape(parentIdColumnName))
-                .New(SqlStuff.UnEscape(templateTableName)+"Trigger", SqlStuff.UnEscape(tableName) + "Trigger");
+                .New(SqlStuff.UnEscape(templateTableName) + "Trigger", SqlStuff.UnEscape(tableName) + "Trigger");
 
             return scriptWithReplacedVariables.ToString();
         }

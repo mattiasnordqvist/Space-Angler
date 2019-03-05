@@ -49,5 +49,103 @@ namespace Tests
             await test.ExecuteAsync($"INSERT INTO [{test.Table}] (Id) VALUES (1)");
             await test.AssertAll("1");
         }
+
+        [Test]
+        public async Task DeleteLeaf()
+        {
+            var tree = @"
+            1       
+            > 2     
+            > > 5   
+            > > 6   
+            > 3     
+            > > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ";
+            var test = await Test(tree);
+            await test.ExecuteAsync($"DELETE FROM [{test.Table}] WHERE Id = 5");
+            await test.AssertAll(@"
+            1       
+            > 2     
+            > > 6   
+            > 3     
+            > > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ");
+        }
+
+        [Test]
+        public async Task DeleteRoot()
+        {
+            var tree = @"
+            1       
+            > 2     
+            > > 5   
+            > > 6   
+            > 3     
+            > > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ";
+            var test = await Test(tree);
+            await test.ExecuteAsync($"DELETE FROM [{test.Table}] WHERE Id = 1");
+            await test.AssertAll(@"");
+        }
+
+        [Test]
+        public async Task DeleteMiddle()
+        {
+            var tree = @"
+            1       
+            > 2     
+            > > 5   
+            > > 6   
+            > 3     
+            > > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ";
+            var test = await Test(tree);
+            await test.ExecuteAsync($"DELETE FROM [{test.Table}] WHERE Id = 2");
+            await test.AssertAll(@"
+            1       
+            > 3     
+            > > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ");
+        }
+
+
+        [Test]
+        public async Task DeleteMultiple()
+        {
+            var tree = @"
+            1       
+            > 2     
+            > > 5   
+            > > 6   
+            > 3     
+            > > 7   
+            > > 9   
+            > 4     
+            > > 8   
+            ";
+            var test = await Test(tree);
+            await test.ExecuteAsync($"DELETE FROM [{test.Table}] WHERE Id > 3 AND Id <> 5");
+            await test.AssertAll(@"
+            1       
+            > 2     
+            > > 5   
+            > 3    
+            ");
+        }
     }
 }

@@ -25,18 +25,18 @@ namespace Sql
 
         public static Script Read<T>(string path)
         {
-            return new Script(Resources<T>.Read(path));
+            return new Script(Resources<T>.Read("Sql." + path + ".sql"));
         }
 
         public Script New(string thisWith, string that)
         {
-            
+
             return new Script(batches.Select(x => x.Replace(thisWith, that)).ToList());
         }
 
         public async Task ExecuteAsync(SqlConnection connection)
         {
-            foreach(var batch in batches)
+            foreach (var batch in batches)
             {
                 await connection.ExecuteAsync(batch);
             }
