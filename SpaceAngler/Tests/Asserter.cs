@@ -21,7 +21,7 @@ namespace Tests
         {
             var values = list.Values;
             var leaves = values.Where(x => x.IsLeaf.Value).ToList();
-            NUnit.Framework.Assert.IsTrue(leaves.All(x => x.L != null && x.R != null), "There are nodes without L or R.");
+            NUnit.Framework.Assert.IsFalse(values.Any(x => x.L == null || x.R == null), "There are nodes without L or R.");
             NUnit.Framework.Assert.IsTrue(leaves.All(x => x.L + 1 == x.R), "There are leaves where L + 1 not equals R");
             NUnit.Framework.Assert.IsTrue(values.All(x => !leaves.Any(y => y.Id == x.Parent_Id)), "There are regular nodes with IsLeaf = true");
             NUnit.Framework.Assert.IsTrue(values.All(x => x.L < x.R), "There are nodes where L is not less than R");

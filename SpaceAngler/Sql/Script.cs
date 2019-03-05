@@ -15,7 +15,7 @@ namespace Sql
 
         public Script(string sql)
         {
-            batches = sql.Split("GO").Where(x => x != string.Empty);
+            batches = sql.Split("GO").Where(x => x != string.Empty).ToList();
         }
 
         public Script(List<string> list)

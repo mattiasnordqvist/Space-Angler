@@ -20,7 +20,7 @@ namespace Tests
 
 
         public static Script CreateTable = TestScripts.Read("create-table");
-        public static Script DropTable = TestScripts.Read("create-table");
+        public static Script DropTable = TestScripts.Read("drop-table");
         private Script _alterTable = Script.Read<Script>("alter-table");
         private Script _filler = Script.Read<Script>("filler");
         private Script _iTrigger = Script.Read<Script>("triggers.insert");

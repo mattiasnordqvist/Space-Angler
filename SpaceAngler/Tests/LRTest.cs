@@ -29,7 +29,7 @@ namespace Tests
 
         internal async Task AssertAll(string expected = null)
         {
-            var nodes = _connection.Query<Node>($"SELECT * FROM {SqlStuff.Escape(Table)}").ToDictionary(x => x.Id, x => x);
+            var nodes = (await _connection.QueryAsync<Node>($"SELECT * FROM {SqlStuff.Escape(Table)}")).ToDictionary(x => x.Id, x => x);
             await DropTable().ExecuteAsync(_connection);
             var asserter =  new Asserter(nodes, expected ?? _expected);
             asserter.AssertAll();
