@@ -27,10 +27,13 @@ namespace Cli
             sb.AppendLine("GO");
             sb.AppendLine(Script.Read<Script>("filler").ToString());
             sb.AppendLine("GO");
+            sb.AppendLine($"-- SPACE ANGLER v {Assembly.GetExecutingAssembly().GetName().Version} see https://github.com/mattiasnordqvist/Space-Angler");
             sb.AppendLine(Script.Read<Script>("triggers.delete").ToString());
             sb.AppendLine("GO");
+            sb.AppendLine($"-- SPACE ANGLER v {Assembly.GetExecutingAssembly().GetName().Version} see https://github.com/mattiasnordqvist/Space-Angler");
             sb.AppendLine(Script.Read<Script>("triggers.insert").ToString());
             sb.AppendLine("GO");
+            sb.AppendLine($"-- SPACE ANGLER v {Assembly.GetExecutingAssembly().GetName().Version} see https://github.com/mattiasnordqvist/Space-Angler");
             sb.AppendLine(Script.Read<Script>("triggers.update").ToString());
             sb.AppendLine("GO");
 
