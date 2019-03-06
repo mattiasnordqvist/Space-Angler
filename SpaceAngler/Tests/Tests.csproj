@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sql\Sql.csproj" />
+    <ProjectReference Include="..\Shared\Core.csproj" />
   </ItemGroup>
 
 </Project>

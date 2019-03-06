@@ -1,7 +1,0 @@
--- Add left right
-ALTER TABLE [Node] ADD L INT NULL
-ALTER TABLE [Node] ADD R INT NULL
-GO
-
---- Leaf nodes?
-ALTER TABLE [Node] ADD IsLeaf AS CASE WHEN L + 1 = R THEN 1 ELSE 0 END PERSISTED

@@ -1,5 +1,4 @@
-﻿using Shared;
-using Sql;
+﻿using Core;
 
 namespace Tests
 {

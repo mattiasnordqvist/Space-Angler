@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="alter-table.sql" />
+    <None Remove="filler.sql" />
+    <None Remove="oldfiller.sql" />
+    <None Remove="test-data.sql" />
+    <None Remove="triggers\delete.sql" />
+    <None Remove="triggers\insert.sql" />
+    <None Remove="triggers\update.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="alter-table.sql" />
+    <EmbeddedResource Include="filler.sql" />
+    <EmbeddedResource Include="oldfiller.sql" />
+    <EmbeddedResource Include="test-data.sql" />
+    <EmbeddedResource Include="triggers\delete.sql" />
+    <EmbeddedResource Include="triggers\insert.sql" />
+    <EmbeddedResource Include="triggers\update.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+  </ItemGroup>
+
+</Project>

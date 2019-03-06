@@ -5,23 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="alter-table.sql" />
     <None Remove="create-triggers.sql" />
-    <None Remove="filler.sql" />
-    <None Remove="oldfiller.sql" />
-    <None Remove="test-data.sql" />
-    <None Remove="triggers\insert.sql" />
-    <None Remove="triggers\update.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="alter-table.sql" />
-    <EmbeddedResource Include="oldfiller.sql" />
-    <EmbeddedResource Include="test-data.sql" />
-    <EmbeddedResource Include="triggers\update.sql" />
-    <EmbeddedResource Include="triggers\insert.sql" />
-    <EmbeddedResource Include="triggers\delete.sql" />
-    <EmbeddedResource Include="filler.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <Folder Include="triggers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Core.csproj" />
   </ItemGroup>
 
 </Project>

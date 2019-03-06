@@ -1,0 +1,20 @@
+-- Add left right
+ALTER TABLE [%_Node_%] ADD L INT NULL
+ALTER TABLE [%_Node_%] ADD R INT NULL
+GO
+
+--- Leaf nodes?
+ALTER TABLE [%_Node_%] ADD IsLeaf AS CASE WHEN L + 1 = R THEN 1 ELSE 0 END PERSISTED
+GO
+
+ALTER TABLE [%_Node_%]
+ADD CONSTRAINT [CHK_%_Node_%_LeftLessThanRight] CHECK  (L < R);
+
+--CONSTRAINTS NOT COMPATIBLE WITH UPDATE TRIGGER :(
+--CREATE UNIQUE NONCLUSTERED INDEX [IX_%_Node_%_Left_NotNull]
+--ON [%_Node_%](L)
+--WHERE L IS NOT NULL
+
+--CREATE UNIQUE NONCLUSTERED INDEX [IX_%_Node_%_Right_NotNull]
+--ON [%_Node_%](R)
+--WHERE R IS NOT NULL

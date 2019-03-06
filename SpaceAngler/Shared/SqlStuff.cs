@@ -1,4 +1,4 @@
-﻿namespace Sql
+﻿namespace Core
 {
     public static class SqlStuff
     {

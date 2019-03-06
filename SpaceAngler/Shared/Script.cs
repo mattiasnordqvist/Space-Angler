@@ -4,9 +4,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Shared;
 
-namespace Sql
+namespace Core
 {
     public class Script
     {
@@ -25,7 +24,7 @@ namespace Sql
 
         public static Script Read<T>(string path)
         {
-            return new Script(Resources<T>.Read("Sql." + path + ".sql"));
+            return new Script(Resources<T>.Read("Core." + path + ".sql"));
         }
 
         public Script New(string thisWith, string that)
