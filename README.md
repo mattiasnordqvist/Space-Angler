@@ -1,6 +1,6 @@
 # Space Angler
 
-Based on knowledge from http://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/, adapter for SQL Server.
+Based on knowledge from http://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/, adapted for SQL Server.
 
 ## What is it?
 
