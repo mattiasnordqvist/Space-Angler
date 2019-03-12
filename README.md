@@ -19,7 +19,7 @@ You should already have a table looking something like this:
 |      5  |              2 |                   |
 |      6  |           NULL |                   |
 
-By running the included CLI, you're prompted to give (they can also be passed as parameters) the name of your table (-t), id column (-i) and parent id column (-p). The CLI will produce a script in out.sql. Running this script on your database would change your table to something like this:
+By running the included CLI (you can run it from visual studio, just open the project...), you're prompted to give (they can also be passed as parameters) the name of your table (-t), id column (-i) and parent id column (-p). The CLI will produce a script in out.sql. Running this script on your database would change your table to something like this:
 
 | Id (PK) | Parent_Id (FK) | L  | R  | IsLeaf | Other columns ... |
 | ------- | -------------- | -- | -- | -------| ----------------- |
