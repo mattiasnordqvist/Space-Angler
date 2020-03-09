@@ -32,6 +32,6 @@ By running the included CLI (you can run it from visual studio, just open the pr
 
 The script has also added a "after update"-trigger, a "instead of delete"-trigger and a "after insert"-trigger.
 
-Now you can start indexing L and R, and query the structure in O(1) instead of O(logn)/O(n) (best and worst case using recursive cte)
+Now you can start indexing L and R, and query the structure in O(1) instead of somewhere between O(logn) nad O(n) (best and worst case using recursive cte)
 
 Try it out!
